@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Faculty Evaluation Automation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Montserrat', sans-serif; /* Changed to Montserrat for consistency */
+            margin: 0;
+            padding-top: 80px; /* Space for fixed navbar */
+            background-color: #f8f9fa; /* Light background */
+            line-height: 1.6;
+            color: #333;
+            font-size: 16px; /* Base font size for rem units */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* --- Navbar Specific Variables (from responsive navbar code) --- */
+        :root {
+           --navbar-bg-color: rgb(49, 98, 170); /* White background */
+            --navbar-link-color: white; /* Dark text for links */
+            --navbar-hover-color: #007bff; /* Blue for hover/active, matching your blue */
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --breakpoint-mobile: 768px; /* Mobile breakpoint */
+        }
+
+        /* --- Navbar Styles (Integrated from responsive navbar code) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--navbar-bg-color);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000; /* Ensure navbar stays on top */
+            box-sizing: border-box;
+        }
+
+        .navbar-logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--navbar-hover-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-logo img {
+            height: 40px; /* Adjust logo height as needed */
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none; /* Remove bullet points */
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navbar-link-color);
+            font-weight: 500;
+            font-size: 1.05em;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--navbar-hover-color);
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--navbar-hover-color);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu Icon */
+        .menu-toggle {
+            display: none; /* Hidden by default on desktop */
+            font-size: 1.8em;
+            cursor: pointer;
+            color: var(--navbar-link-color);
+            transition: color 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: var(--navbar-hover-color);
+        }
+        /* --- End Navbar Styles --- */
+
+
+        /* Hero Section */
+        .first-hero {
+            background: url(images/3\ \(1\).jpg) no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem; /* Responsive padding */
+            position: relative;
+            overflow: hidden; /* To contain potential image overflow on smaller screens */
+        }
+
+        .first-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .first-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .first-hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .first-hero .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 0.8rem 1.8rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .first-hero .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Key Benefits Section */
+        .key-benefits {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .key-benefits h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center; /* Center the section title */
+        }
+
+        .key-benefits .description {
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .benefits-grid {
+            display: flex;
+            flex-wrap: wrap; /* Allow cards to wrap */
+            justify-content: center; /* Center cards when fewer than full row */
+            gap: 1.5rem; /* Space between cards */
+        }
+
+        .benefit-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            flex: 1; /* Allow cards to grow/shrink */
+            min-width: 280px; /* Minimum width for cards before wrapping */
+            max-width: calc(25% - 1.5rem); /* For 4 columns on large screens */
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .benefit-card i {
+            font-size: 1.8rem;
+            color: #007bff;
+            margin-bottom: 0.8rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+
+        .benefit-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* --- Media Queries for Responsiveness (adjusted for navbar integration) --- */
+
+        /* Tablets (max-width 768px - which is also --breakpoint-mobile) */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none; /* Hide traditional links on mobile */
+                flex-direction: column;
+                position: absolute;
+                top: 70px; /* Below the navbar */
+                left: 0;
+                width: 100%;
+                background-color: var(--navbar-bg-color);
+                box-shadow: 0 5px 15px var(--shadow-light);
+                padding: 20px 0;
+                border-top: 1px solid #eee;
+            }
+
+            .nav-links.active {
+                display: flex; /* Show when active */
+            }
+
+            .nav-links li {
+                width: 100%; /* Make list items take full width */
+            }
+
+            .nav-links a {
+                padding: 12px 20px;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0; /* Separator for mobile links */
+                display: block; /* Make links block-level for full touch area */
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
+            }
+
+            /* Remove underline effect on mobile for cleaner look */
+            .nav-links a::after {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block; /* Show hamburger icon on mobile */
+            }
+
+            /* Existing media queries for content below */
+            .first-hero {
+                padding: 4rem 1rem;
+            }
+            .first-hero h1 {
+                font-size: 2.2rem;
+            }
+            .first-hero p {
+                font-size: 1rem;
+            }
+
+            .key-benefits h2 {
+                font-size: 1.8rem;
+            }
+            .key-benefits .description {
+                font-size: 0.95rem;
+            }
+
+            .benefits-grid {
+                flex-direction: column; /* Stack cards on smaller tablets/mobile */
+                align-items: center; /* Center stacked cards */
+                gap: 1rem;
+            }
+
+            .benefit-card {
+                min-width: unset; /* Remove min-width for stacking */
+                width: 90%; /* Take up most of the width when stacked */
+                max-width: 400px; /* Prevent cards from getting too wide if stacking */
+            }
+
+            .footer .footer-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .footer .footer-links a {
+                margin: 0; /* Remove horizontal margin for vertical stack */
+            }
+        }
+
+        /* Mobile Phones (max-width 480px) */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px; /* Slightly smaller base font */
+            }
+
+            .navbar-logo {
+                font-size: 1.3em; /* Smaller logo text on very small screens */
+            }
+            .navbar-logo img {
+                height: 30px; /* Smaller logo image */
+            }
+
+            .menu-toggle {
+                font-size: 1.5em; /* Smaller toggle icon */
+            }
+
+            /* Existing media queries for content below */
+            .first-hero {
+                padding: 3rem 0.8rem;
+            }
+            .first-hero h1 {
+                font-size: 1.8rem;
+            }
+            .first-hero p {
+                font-size: 0.9rem;
+            }
+            .first-hero .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .key-benefits {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            .key-benefits h2 {
+                font-size: 1.5rem;
+            }
+            .key-benefits .description {
+                font-size: 0.85rem;
+                margin-bottom: 2rem;
+            }
+
+            .benefit-card {
+                padding: 1rem;
+                width: 100%; /* Take full width on small phones */
+            }
+            .benefit-card i {
+                font-size: 1.5rem;
+            }
+            .benefit-card h3 {
+                font-size: 1rem;
+            }
+            .benefit-card p {
+                font-size: 0.8rem;
+            }
+
+            .footer {
+                padding: 1rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            .footer .footer-links a {
+                margin: 0.3rem 0; /* Adjust spacing for vertical footer links */
+            }
+        }
+        .newh1{
+            color: white;
+        }
+    </style>
+<!--Style for the features-->
+    <style>
+        
+        .feature-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .features-section {
+            padding: 50px 30px;
+            text-align: center;
+            background-color: #fff;
+        }
+        .features-section h2 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: #333;
+            font-weight: 700;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .feature-card-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #e0f2fe;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #00ffaa;
+        }
+        .feature-card-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        .feature-card h3 {
+            font-size: 1.15em;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .feature-card p {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .features-section h2 {
+                font-size: 1.8em;
+            }
+            .features-grid {
+                grid-template-columns: 1fr; /* Stack features on very small screens */
+            }
+            .feature-card {
+                padding: 20px;
+            }
+            
+        }
+
+        @media (max-width: 480px) {
+            .features-section {
+                padding: 30px 20px;
+            }
+            .features-section h2 {
+                font-size: 1.6em;
+            }
+            .feature-card h3 {
+                font-size: 1.05em;
+            }
+            .feature-card p {
+                font-size: 0.85em;
+            }
+            
+        }
+
+
+    </style>
+<!--Style for the about-->
+    <style>
+         /* --- Page Content Styles --- */
+         .about-container {
+            width: 95%; /* Use a percentage for width */
+            max-width: 900px; /* Maximum width for larger screens */
+            background-color: #f7f3f3;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem 2.5rem; /* Use rem for padding */
+            margin: 2rem auto; /* Center the container with top margin */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.8rem; /* Use rem */
+            color: #333;
+            margin-bottom: 1.5rem; /* Use rem */
+        }
+
+        h2 {
+            font-size: 1.3rem; /* Use rem */
+            color: #333;
+            margin-bottom: 1rem; /* Use rem */
+        }
+
+        .section-description {
+            font-size: 0.95rem; /* Use rem */
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 1.875rem; /* Use rem */
+        }
+
+        .objective-item, .impact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.25rem; /* Use rem */
+        }
+
+        .objective-item i, .impact-item i {
+            font-size: 1.5rem; /* Use rem */
+            color: #007bff; /* Blue icon color */
+            margin-right: 0.9375rem; /* Use rem */
+            padding-top: 0.1875rem; /* Use rem (3px) */
+            width: 1.875rem; /* Use rem (30px) fixed width for icons */
+            text-align: center;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .objective-item .text-content, .impact-item .text-content {
+            flex-grow: 1;
+        }
+
+        .objective-item strong, .impact-item strong {
+            display: block;
+            font-size: 1.05rem; /* Use rem */
+            color: #444;
+            margin-bottom: 0.3125rem; /* Use rem (5px) */
+        }
+
+        .objective-item p, .impact-item p {
+            margin: 0;
+            font-size: 0.9rem; /* Use rem */
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* --- Responsive Styles (for Navbar and Content) --- */
+        @media (max-width: 768px) {
+          
+
+            /* Content adjustments for smaller screens */
+            .container {
+                padding: 1.5rem 1.5rem;
+                margin-top: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+                margin-bottom: 1.2rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .section-description {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .objective-item i, .impact-item i {
+                font-size: 1.3rem;
+                margin-right: 0.8rem;
+                width: 1.5rem;
+            }
+
+            .objective-item strong, .impact-item strong {
+                font-size: 1rem;
+            }
+
+            .objective-item p, .impact-item p {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+          
+
+            .container {
+                padding: 1rem;
+                margin-top: 1rem;
+                border-radius: 0; /* Full width on tiny screens, no corner radius */
+                box-shadow: none; /* No shadow */
+            }
+
+          
+
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+                margin-bottom: 0.7rem;
+            }
+
+            .section-description {
+                font-size: 0.85rem;
+                margin-bottom: 1rem;
+            }
+
+            .objective-item i, .impact-item i {
+                font-size: 1.2rem;
+                margin-right: 0.6rem;
+                padding-top: 0.1rem;
+                width: 1.2rem;
+            }
+
+            .objective-item strong, .impact-item strong {
+                font-size: 0.95rem;
+            }
+
+            .objective-item p, .impact-item p {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+
+<!--Style for team-->
+    <style>
+          .team-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* About Us Section */
+        .about-us {
+            background-color: #fff;
+            padding: 40px 0;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .about-us h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .about-us p {
+            line-height: 1.6;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Our Team Section - List styling */
+        .our-team {
+            padding: 40px 0;
+        }
+
+        .our-team h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+
+        .team-list {
+            list-style: none; /* Remove default list bullets */
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Stack items vertically by default */
+            gap: 20px; /* Space between list items */
+        }
+
+        .team-list-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            justify-content: space-between; /* Distribute space */
+        }
+
+        .member-info {
+            flex-grow: 1; /* Allows info to take up available space */
+            margin-right: 20px; /* Space between info and image */
+        }
+
+        .member-info h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .member-info p {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .btn-view-profile {
+            background-color: #007bff; /* Primary blue color */
+            color: white; /* White text for contrast */
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-view-profile:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .member-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #ddd; /* Placeholder background */
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #eee;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        /* Specific team member images (placeholders, replace with actual images) */
+        .maria-ngang {
+            background-image: url(images/two.jpg);
+        }
+        .melissa-machado {
+            background-image: url(images/3\ \(4\).jpg);
+        }
+        .fatimata-sessay {
+            background-image: url(images/3\ \(1\).jpg);
+        }
+        .dorian-oliphant {
+            background-image: url(images/3\ \(3\).jpg);
+        }
+        .russell-trainer {
+            background-image: url(images/one.jpg);
+        }
+
+
+        /* --- Media Queries for Responsiveness (adjusted for navbar integration) --- */
+
+        /* Tablets (max-width 768px - which is also --breakpoint-mobile) */
+        @media (max-width: 768px) {
+           
+
+           
+            /* Existing media queries for content below */
+            .about-us h1, .our-team h2 {
+                font-size: 2em;
+            }
+
+            .about-us p {
+                font-size: 0.95em;
+            }
+
+            .team-list-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .member-info {
+                margin-right: 0;
+                margin-bottom: 15px; /* Add space between info and image when stacked */
+            }
+
+            .member-image {
+                order: -1; /* Move image above info on small screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+          
+
+            /* Existing media queries for content below */
+            .about-us h1, .our-team h2 {
+                font-size: 1.8em;
+            }
+
+            .about-us p {
+                font-size: 0.9em;
+            }
+
+            .team-list-item {
+                padding: 15px;
+            }
+
+            .member-info h3 {
+                font-size: 1.1em;
+            }
+
+            .member-info p {
+                font-size: 0.8em;
+            }
+
+            .btn-view-profile {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+
+            .member-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+
+
+<!--Style for the contact form-->
+    <style>
+         :root {
+            --primary-blue: #4A90E2; /* Main vibrant blue for contact page elements */
+            --light-blue: #87CEEB;   /* Sky blue for lighter accents */
+            --dark-blue: #2A79C2;    /* Darker blue for deeper tones */
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f8f8f8;
+            --bg-dark: #e0e0e0;
+            --border-color: #ddd;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.2);
+
+            /* Navbar specific variables from STEM code, adjusted for blue theme */
+            --navbar-bg-color: #ffffff; /* White background for navbar */
+            --navbar-link-color: var(--text-dark); /* Dark text for navbar links */
+            --navbar-hover-color: var(--primary-blue); /* Primary blue for navbar hover/active */
+            --breakpoint-mobile: 768px; /* Mobile breakpoint */
+            --navbar-bg-color: rgb(49, 98, 170); /* White background */
+            --navbar-link-color: white; /* Dark text for links */
+            --navbar-hover-color: #007bff; /* Blue for hover/active, matching your blue */
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --breakpoint-mobile: 768px; /* Mobile breakpoint */
+        }
+
+     
+        .contact-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow-medium);
+            padding: 40px;
+            max-width: 950px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            z-index: 1; /* Ensure container content is above pseudo-elements */
+        }
+
+        /* Updated pseudo-elements to blue tones */
+        .contact-container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--light-blue) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .contact-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-blue) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+
+        h1.contact-us-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.8em;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 40px;
+            color: var(--primary-blue); /* Title color is primary blue */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-section, .form-section {
+            flex: 1;
+            min-width: 300px;
+            box-sizing: border-box;
+        }
+
+        .info-section {
+            /* Updated gradient for info section to blue tones */
+            background: linear-gradient(180deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23ffffff" opacity="0.05"/></svg>') repeat;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item i {
+            font-size: 1.8em;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-content label {
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .info-content p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05em;
+            line-height: 1.4;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 5px;
+        }
+
+        .form-section input[type="text"],
+        .form-section input[type="email"],
+        .form-section textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1.05em;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section input::placeholder,
+        .form-section textarea::placeholder {
+            color: var(--text-light);
+            opacity: 0.8;
+        }
+
+        .form-section input[type="text"]:focus,
+        .form-section input[type="email"]:focus,
+        .form-section textarea:focus {
+            border-color: var(--primary-blue); /* Border color on focus is primary blue */
+            background-color: #fff;
+            /* Updated glow on focus to blue tone */
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+            outline: none;
+        }
+
+        .form-section textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .send-button {
+            /* Updated gradient for button to blue tones */
+            background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.15em;
+            font-weight: 600;
+            align-self: flex-start;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .send-button i {
+            font-size: 1.2em;
+        }
+
+        .send-button:hover {
+            /* Updated hover gradient for button to blue tones */
+            background: linear-gradient(90deg, var(--dark-blue), var(--primary-blue));
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsiveness (adjusted for navbar integration) */
+        @media (max-width: 850px) {
+            .contact-container {
+                flex-direction: column;
+                padding: 30px;
+                gap: 30px;
+            }
+
+            h1.contact-us-title {
+                font-size: 3em;
+                margin-bottom: 30px;
+            }
+
+            .info-section {
+                order: 2;
+                padding: 25px;
+            }
+
+            .form-section {
+                order: 1;
+            }
+
+            .info-item {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+       
+
+        @media (max-width: 580px) {
+           
+
+            .contact-container {
+                padding: 20px;
+            }
+
+            h1.contact-us-title {
+                font-size: 3em;
+                margin-bottom: 25px;
+            }
+
+            .info-item {
+                gap: 10px;
+            }
+
+            .info-item i {
+                font-size: 1.5em;
+            }
+
+            .info-content label {
+                font-size: 1.1em;
+            }
+
+            .info-content p {
+                font-size: 0.95em;
+            }
+
+            .form-section input,
+            .form-section textarea {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+
+            .send-button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+
+      
+
+        @media (max-width: 768px) {
+            h1.contact-us-title {
+                font-size: 2em;
+            }
+
+            .info-section, .form-section {
+                min-width: unset;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> 
+    
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="navbar-logo">
+            <img src="WhatsApp_Bild_2025-07-21_um_08.33.14_d8498586-removebg-preview.png" alt="Company Logo">
+        </a>
+
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#first-hero">Home</a></li>
+            <li><a href="#about-container">About</a></li>
+            
+            <li><a href="#features-section">Features</a></li>
+            <li><a href="#our-team">Team</a></li>
+            <li><a href="#contact-container">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="first-hero" id="first-hero">
+            <div class="hero-content">
+                <h1 class="newh1">STEM Faculty Evaluation Automation System</h1>
+                <p>Streamlining the faculty evaluation process for Prince George's Community College's STEM departments. This system ensures fair, efficient, and data-driven evaluations, fostering continuous improvement in teaching and learning.</p>
+                <a href="https://www.pgcc.edu/" target="_blank" class="btn">Visite Our School</a>
+                
+            </div>
+        </section>
+
+        <section class="key-benefits">
+
+            <!----------------------------------------------------->
+              <button id="toggleEvidenceForm">Submit Evidence</button>
+
+  <div id="formOverlay">
+    <div class="form-container">
+      <span class="close-btn" id="closeEvidenceForm">&times;</span>
+      <div class="form-content">
+        <h1>STEM Faculty Evaluation – Submit Evidence Form</h1>
+        <p>
+          Faculty must use this form to submit supporting evidence for their evaluation. Uploads may include course materials, student feedback, presentations, media, and more.
+        </p>
+
+        <h2>Section 1: Faculty Information</h2>
+        <form>
+          <label>Full Name:</label>
+          <input type="text" name="fullName" required>
+
+          <label>Email Address:</label>
+          <input type="email" name="email" required>
+
+          <label>Department:</label>
+          <input type="text" name="department" required>
+
+          <label>Faculty Type (Full-Time / Adjunct):</label>
+          <input type="text" name="facultyType" required>
+
+          <label>Semester & Year:</label>
+          <input type="text" name="semesterYear" required>
+
+          <h2>Section 2: Evidence Submission</h2>
+
+          <label>1. Teaching Materials (syllabus, lesson plans, etc.):</label>
+          <input type="file">
+
+          <label>2. Student Feedback Summary:</label>
+          <textarea rows="3"></textarea>
+
+          <label>3. Presentations / Media Links:</label>
+          <textarea rows="3"></textarea>
+
+          <label>4. Additional Evidence (optional):</label>
+          <input type="file">
+
+          <h2>Section 3: Optional Comments</h2>
+
+          <label>Notes to Supervisor:</label>
+          <textarea rows="3"></textarea>
+
+          <label>Date:</label>
+          <input type="date">
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+             
+            <!------------------------------------------------------>
+            <h2>Key Benefits</h2>
+            <p class="description">
+                Our system offers a comprehensive solution to enhance the faculty evaluation process within
+                the STEM departments at Prince George's Community College. By automating key tasks and
+                providing valuable data insights, we aim to support faculty growth and improve educational
+                outcomes.
+            </p>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Efficient Evaluations</h3>
+                    <p>Automate the evaluation process, reducing manual effort and administrative burden.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="far fa-clock"></i>
+                    <h3>Time Savings</h3>
+                    <p>Save valuable time for faculty and administrators, allowing more focus on teaching and student success.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Gain actionable insights from evaluation data to identify areas for improvement and support faculty development.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Fairness and Transparency</h3>
+                    <p>Ensure a consistent and transparent evaluation process, promoting fairness and accountability.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="features-section" id="features-section">
+        <div class="feature-container">
+            <h2>Key Features and Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sliders-h"></i></div> <h3>Customizable Evaluation Criteria</h3>
+                    <p>Tailor evaluation parameters to specific STEM disciplines and institutional goals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div> <h3>Multi-Source Feedback Collection</h3>
+                    <p>Gather insights from students, peers, and self-assessments for a holistic view.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div> <h3>Real-Time Analytics</h3>
+                    <p>Monitor progress and identify trends with interactive dashboards and visual representations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div> <h3>Automated Reports</h3>
+                    <p>Generate comprehensive reports automatically, saving time and ensuring accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-lock"></i></div> <h3>Secure Integration</h3>
+                    <p>Integrate seamlessly with existing college systems, ensuring data integrity and security.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-mouse-pointer"></i></div> <h3>User-Friendly Interface</h3>
+                    <p>Navigate the system effortlessly with an intuitive design that simplifies the evaluation process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--About-->
+
+    <div class="about-container" id="about-container">
+        <h1>Project Goals, Objectives, and Impact</h1>
+
+        <h2>Primary Goal</h2>
+        <p class="section-description">
+            The primary goal of the STEM Faculty Evaluation Automation System is to modernize and standardize the faculty
+            evaluation process at Prince George's Community College (PGCC). This involves transitioning from manual, paper-based
+            methods to a streamlined, digital system that ensures consistency, efficiency, and transparency.
+        </p>
+
+        <h2>Specific Objectives</h2>
+        <div class="objective-list">
+            <div class="objective-item">
+                <i class="far fa-clock"></i> <div class="text-content">
+                    <strong>Reduce Processing Time</strong>
+                    <p>Automate key steps in the evaluation process to significantly reduce the time required for completion.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <i class="fas fa-list-alt"></i> <div class="text-content">
+                    <strong>Enhance Consistency</strong>
+                    <p>Implement standardized criteria and procedures to ensure fairness and uniformity across all faculty evaluations.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <i class="far fa-comment-dots"></i> <div class="text-content">
+                    <strong>Deliver Timely Feedback</strong>
+                    <p>Provide faculty with timely and constructive feedback to support their professional growth and development.</p>
+                </div>
+            </div>
+            <div class="objective-item">
+                <i class="far fa-eye"></i> <div class="text-content">
+                    <strong>Improve Transparency</strong>
+                    <p>Create a transparent evaluation process where faculty can easily access their evaluation status, feedback, and relevant documentation.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Broader Impact</h2>
+        <div class="impact-list">
+            <div class="impact-item">
+                <i class="fas fa-graduation-cap"></i> <div class="text-content">
+                    <strong>Improve Education Quality</strong>
+                    <p>By improving faculty evaluations, the system will contribute to enhancing the quality of education provided to students.</p>
+                </div>
+            </div>
+            <div class="impact-item">
+                <i class="fas fa-tasks"></i> <div class="text-content">
+                    <strong>Streamline Administration</strong>
+                    <p>The automated system will streamline administrative tasks, freeing up staff to focus on other important activities.</p>
+                </div>
+            </div>
+            <div class="impact-item">
+                <i class="fas fa-user-friends"></i> <div class="text-content">
+                    <strong>Support Faculty Development</strong>
+                    <p>The system will support faculty development by providing clear feedback and identifying areas for improvement.</p>
+                </div>
+            </div>
+            <div class="impact-item">
+                <i class="fas fa-rocket"></i> <div class="text-content">
+                    <strong>Increase Overall Productivity</strong>
+                    <p>By automating and streamlining processes, the system will increase overall productivity within the STEM faculty.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="about-us" >
+        <div class="team-container">
+            <h1>About NextGen Innovators</h1>
+            <p>NextGen Innovators is a leading technology firm specializing in automation solutions for educational institutions. Our mission is to empower educators with cutting-edge tools that streamline processes, enhance efficiency, and foster innovation in teaching and learning. We are committed to delivering tailored solutions that meet the unique needs of each institution, ensuring seamless integration and maximum impact.</p>
+        </div>
+    </section>
+
+    <section class="our-team" id="our-team">
+        <div class="team-container">
+            <h2>Our Team</h2>
+            <ul class="team-list">
+                <li class="team-list-item">
+                    <div class="member-info">
+                        <h3>Maria Ngang</h3>
+                        <p>Project Manager</p>
+                        <details class="btn-view-profile">Maria Ngang leads the project,
+                             ensuring alignment with the proposal and objectives. 
+                             Her expertise in project management
+                             drives successful execution and delivery. </details>
+                    </div>
+                    <div class="member-image maria-ngang"></div>
+                </li>
+
+                <li class="team-list-item">
+                    <div class="member-info">
+                        <h3>Melissa Machado</h3>
+                        <p>Leading Developer</p>
+                        <details class="btn-view-profile">Melissa Machado oversees the technical 
+                            development, ensurinc code quality, system functionality, 
+                            and seamless integrationwith existing systems.</details>
+                    </div>
+                    <div class="member-image melissa-machado"></div>
+                </li>
+
+                <li class="team-list-item">
+                    <div class="member-info">
+                        <h3>Fatmata Sessay</h3>
+                        <p>UI/UX Designer</p>
+                        <details class="btn-view-profile">Fatmata Sessay designs user-friendly, intuitive, accessible, and visually appealing interfaces for both the system and the
+website.</details>
+                    </div>
+                    <div class="member-image fatimata-sessay"></div>
+                </li>
+
+                <li class="team-list-item">
+                    <div class="member-info">
+                        <h3>Dorian Oliphant</h3>
+                        <p>QA Lead</p>
+                        <details class="btn-view-profile">Dorian Oliphant leads quality assurance, rigorously testing the system to identify and resolve issues, ensuring it meets high
+standards.</details>
+                    </div>
+                    <div class="member-image dorian-oliphant"></div>
+                </li>
+
+                <li class="team-list-item">
+                    <div class="member-info">
+                        <h3>Russell</h3>
+                        <p>Trainer</p>
+                        <details class="btn-view-profile">Russell develops training materials and conducts sessions to effectively onboard users (faculty, administrators) to the new
+system.</details>
+                    </div>
+                    <div class="member-image russell-trainer"></div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+<center>
+    <div class="contact-container" id="contact-container">
+        <h1 class="contact-us-title">Contact Us</h1>
+
+        <div class="info-section">
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="info-content">
+                    <label for="address-info">Address:</label>
+                    <p id="address-info">301, Largo Rd, Largo MD, 20774</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <div class="info-content">
+                    <label for="phone-info">Phone:</label>
+                    <p id="phone-info">+240 4677057</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div class="info-content">
+                    <label for="email-info">Email:</label>
+                    <p id="email-info">mariaschlenka21@yahoo.com</p>
+                </div>
+            </div>
+        </div>
+<!-- Form Section 
+        <div class="form-section">
+            <input type="text" placeholder="Your Name">
+            <input type="email" placeholder="Your Email">
+            <input type="text" placeholder="Subject">
+            <textarea placeholder="Tell us your message..."></textarea>
+            <button class="send-button">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+        </div>
+
+    -->
+
+    <form id="contactForm" class="form-section">
+    <input type="text" id="name" name="name" placeholder="Your Name" required>
+    <input type="email" id="email" name="email" placeholder="Your Email" required>
+    <input type="text" id="subject" name="subject" placeholder="Subject" required>
+    <textarea id="message" name="message" placeholder="Tell us your message..." required></textarea>
+    <button type="submit" class="send-button">
+        <i class="fas fa-paper-plane"></i> Send Message
+    </button>
+</form>
+    </div>
+</center>
+
+    <footer style="background-color: #3b14c7; color: white; padding: 2rem 1rem;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; max-width: 1200px; margin: auto;">
+          
+          <!-- Contact Info -->
+          <div style="flex: 1 1 250px;">
+            <h3>Contact Info</h3>
+            <p style="color: white;">📞 240-467-7057</p>
+            <p>👤 MARIA SCHLENKA</p>
+            <p>📍 301 LARGO-CHES-215</p>
+          </div>
+      
+          <!-- Info & Signup -->
+          <div style="flex: 1 1 250px;">
+            <h3>Faculty Evaluation Automation</h3>
+            <p>Streamline faculty evaluations with our automated system.</p>
+            <form style="margin-top: 1rem;">
+              <input type="email" placeholder="Your email" required style="padding: 0.5rem; width: 100%; max-width: 300px; border: none; border-radius: 4px;">
+              <button type="submit" style="margin-top: 0.5rem; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; background-color: #005f8c; color: white; cursor: pointer;">
+                send
+              </button>
+            </form>
+          </div>
+      
+          <!-- Executive Info -->
+          <div style="flex: 1 1 250px;">
+            <h3>Executive Associate</h3>
+            <p>👤 Allecia Harris</p>
+            <p>🏢 LARGO-CHES-215A</p>
+            <p style="color: white;">📞 240-467-7057</p>
+          </div>
+        </div>
+      
+        <div style="text-align: center; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1rem;">
+          &copy; 2025, Prince George's Community College. All rights reserved.
+        </div>
+      </footer>
+      
+      
+
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Optional: Close menu when a link is clicked (useful for single-page apps)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+    <!--second form js file-->
+
+      <script>
+    
+const toggleBtn = document.getElementById("toggleEvidenceForm");
+const formOverlay = document.getElementById("formOverlay");
+const closeBtn = document.getElementById("closeEvidenceForm");
+
+toggleBtn.addEventListener("click", () => {
+  formOverlay.classList.toggle("active");
+});
+
+closeBtn.addEventListener("click", () => {
+  formOverlay.classList.remove("active");
+});
+    
+  </script>
+</body>
+</html>
